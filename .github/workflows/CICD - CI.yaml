@@ -1,10 +1,11 @@
 name: CI - CiCd
+
 on:
   workflow_dispatch:
   push:
     branches: ["master"]
 
-permission:
+permissions:
   contents: read
 
 env:
@@ -13,33 +14,31 @@ env:
 
 jobs:
   Build-and-Test:
-   name: Build and Test
-   runs-on: ubuntu-latest
+    name: Build and Test
+    runs-on: ubuntu-latest
 
-  steps:
-    - name: Get Code
-      uses: actions/checkout@v7
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v5
-      with:
-      dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: Restore
-      run: dotnet restore ${{ env.SOLUTION_PATH }}
+      - name: Restore
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
 
-    - name: Build
-      run: dotnet build ${{ env.SOLUTION_PATH }}
-        --configuration Release
-        --no-restore
+      - name: Build
+        run: |
+          dotnet build ${{ env.SOLUTION_PATH }} \
+            --configuration Release \
+            --no-restore
 
-    - name: Test
-      run: dotnet test ${{ env.SOLUTION_PATH }}
-        --configuration Release
-        --no-restore
-        --no-build
-        --verbosity normal
-
-
-
-
+      - name: Test
+        run: |
+          dotnet test ${{ env.SOLUTION_PATH }} \
+            --configuration Release \
+            --no-restore \
+            --no-build \
+            --verbosity normal
