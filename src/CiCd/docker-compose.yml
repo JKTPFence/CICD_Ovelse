@@ -1,6 +1,6 @@
 services:
   CICD_TEST:
-    image: ghcr.io/jktpfence/cisdovelse:latest
+    image: ghcr.io/jktpfence/cicdovelse:latest
     restart: unless-stopped
     ports:
      - 8001:8001
